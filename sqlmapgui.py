@@ -63,13 +63,18 @@ risk_var.set("1")  # 設定為預設選1
 risk_combo = ttk.Combobox(frame, textvariable=risk_var, values=["1", "2", "3"])
 risk_combo.grid(row=7, column=1, sticky=tk.W)
 
+# 新增forms參數選項
+forms_var = tk.BooleanVar()
+forms_check = ttk.Checkbutton(frame, text="Forms", variable=forms_var)
+forms_check.grid(row=8, column=0, sticky=tk.W)
+
 # 命令輸出框
 output_text = tk.Text(frame, height=10, width=80, font=font)  # 設定字型大小
-output_text.grid(row=8, column=0, columnspan=2, sticky=(tk.W, tk.E))
+output_text.grid(row=9, column=0, columnspan=2, sticky=(tk.W, tk.E))
 
 # 顯示命令的框
 command_text = tk.Text(frame, height=10, width=80, font=font)  # 設定字型大小
-command_text.grid(row=9, column=0, columnspan=2, sticky=(tk.W, tk.E))
+command_text.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E))
 
 # 組成語法
 def compose_sqlmap_command():
@@ -87,7 +92,9 @@ def compose_sqlmap_command():
     if risk_var.get():
         cmd.append(f"--risk={risk_var.get()}")
     if dbms_var.get():  # 只有在勾选了DBMS时才将其添加到命令中
-        cmd.append(f"--dbms={dbms_var.get()}")  # 
+        cmd.append(f"--dbms={dbms_var.get()}")
+    if forms_var.get():  # 只有在勾选了Forms时才将其添加到命令中
+        cmd.append("--forms")
 
     # 顯示命令
     command_text.delete(1.0, tk.END)
@@ -113,10 +120,10 @@ root.grid_columnconfigure(0, weight=1)
 
 # 按鈕
 compose_button = ttk.Button(frame, text="組成語法", command=compose_sqlmap_command)
-compose_button.grid(row=10, column=0, sticky=tk.W)
+compose_button.grid(row=11, column=0, sticky=tk.W)
 
 execute_button = ttk.Button(frame, text="執行", command=execute_sqlmap_thread)
-execute_button.grid(row=10, column=1, sticky=tk.W)
+execute_button.grid(row=11, column=1, sticky=tk.W)
 
 # 運行主迴圈
 root.mainloop()
